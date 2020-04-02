@@ -1,0 +1,101 @@
+ARG BASE_CONTAINER=ubuntu:18.04
+FROM $BASE_CONTAINER
+
+LABEL maintainer="SARAO Data Science <nadeem@ska.ac.za>"
+#ARG NB_USER="ubuntu"
+#ARG NB_UID="2028"
+#ARG NB_GID="1000"
+
+USER root
+
+RUN apt-get update && apt-get -yq dist-upgrade \
+ && apt-get install -yq --no-install-recommends \
+    wget \
+    bzip2 \
+    ca-certificates \
+    sudo \
+    locales \
+    fonts-liberation \
+    g++ \
+    gcc \
+    libc6-dev \
+    make \
+    ssh \
+    git \
+    pkg-config \
+    libsnappy-dev \
+#    python3-pip \
+    python3-setuptools \
+    python3-dev \
+    build-essential \
+    vim \
+ && rm -rf /var/lib/apt/lists/*
+
+
+# intalling updated version of pip for user only
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
+
+# Configure environment
+ENV SHELL=/bin/bash \
+    #NB_USER=$NB_USER \
+    #NB_UID=$NB_UID \
+    #NB_GID=$NB_GID \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8
+#ENV HOME=/home/$NB_USER
+
+
+# Add a script that we will use to correct permissions after running certain commands
+ADD fix-permissions /usr/local/bin/fix-permissions
+RUN ls -latrh /usr/local/bin/fix-permissions
+RUN chmod +x /usr/local/bin/fix-permissions
+
+# Enable prompt color in the skeleton .bashrc before creating the default NB_USER
+RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc
+
+# Create NB_USER with name specified above with UID=1000 and in the 'users' group
+# and make sure these dirs are writable by the `users` group.
+RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
+    sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
+    sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
+    chmod g+w /etc/passwd
+#useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+
+#install python requirements file
+COPY requirements.txt /tmp/
+RUN pip3 install -r /tmp/requirements.txt
+RUN jupyter notebook --generate-config
+
+# run on 
+EXPOSE 8891
+
+# Configure container startup
+# Add Tini to fix permissions
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
+
+#RUN fix-permissions $HOME
+
+#RUN whoami && \
+#    chown -R $NB_UID $HOME && \
+#    chmod -R o+rwx  $HOME
+
+#USER $NB_UID
+#WORKDIR $HOME
+
+# Switch to current user 
+#USER $NB_UID
+
+
+#Cmd ["start-notebook.sh"]
+#ENV PYTHONPATH "$PYTHONPATH:/usr/lib/python3/dist-packages/:~/.local/lib/python3.6/site-packages"
+
+# default run a notebook server
+CMD sh -c 'whoami && jupyter notebook --no-browser --ip="0.0.0.0" --port 8891 $HOME'
