@@ -9,6 +9,7 @@ LABEL maintainer="SARAO Data Science <nadeem@ska.ac.za>"
 USER root
 
 RUN apt-get update && apt-get -yq dist-upgrade \
+ && apt-get install -y apt-utils \
  && apt-get install -yq --no-install-recommends \
     wget \
     bzip2 \
@@ -24,16 +25,20 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     git \
     pkg-config \
     libsnappy-dev \
-    python3-setuptools \
-    python3-dev \
     build-essential \
     vim \
+    software-properties-common \
  && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && \
+    apt-get install -y software-properties-common
+RUN apt-get install -y python3.8 \
+    python3-setuptools \
+    python3-dev 
 
 # intalling updated version of pip for user only
 RUN wget https://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py pip==19.2.3 
+    python3 get-pip.py pip>=19.2 
 
 Run echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -65,10 +70,12 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 #   useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
 
 #install python requirements file
-#COPY requirements.txt /tmp/
-COPY Nadeemrequirements.txt /tmp/
-#RUN pip3 install -r /tmp/requirements.txt
-RUN pip3 install -r /tmp/Nadeemrequirements.txt
+
+COPY Isaacrequirements.txt /tmp/
+RUN pip3 install -r /tmp/Isaacrequirements.txt
+
+#COPY Nadeemrequirements.txt /tmp/
+#RUN pip3 install -r /tmp/Nadeemrequirements.txt
 
 # run on port 8895
 EXPOSE 8895
@@ -104,4 +111,4 @@ CMD ls /home/nadeem/DS/FB_Prophet/*py && \
 
 # default run a notebook server
 #CMD sh -c 'whoami && jupyter notebook --no-browser --ip="0.0.0.0" --port 8893 $HOME'
-CMD sh -c 'whoami && '
+CMD sh -c 'python3 --version'

@@ -40,5 +40,5 @@ DOCKER_OPTS="-it "\
 #- b : path where you will save your  array of bad files, you need to give it the# name of the array also.
 
 
-alias kathprfidocker="docker run ${DOCKER_OPTS} --name $DOCKER_NAME $DOCKER_NAME python3 $HOME/DS/Isaac/kathprfi/kathprfiUHF.py --vis /home/nadeem/DS/KATHPRFI_UHF/RDB_FILES --flags /home/nadeem/DS/KATHPRFI_UHF/FLAG_FILES --zarr /home/nadeem/DS/KATHPRFI_UHF/ZARR_FILES/Z20190901_20200330.zarr --good /home/nadeem/DS/KATHPRFI_UHF/GOOD_FILES/gd_files.npy --bad /home/nadeem/DS/KATHPRFI_UHF/BAD_FILES/bd_files.npy -n 1 --tokenPresent 20190901_20200330.csv "
-
+alias kathprfiUHFind="docker run ${DOCKER_OPTS} --name $DOCKER_NAME $DOCKER_NAME python3 $HOME/DS/Isaac/kathprfi/kathprfiUHF_indiFiles.py --vis /home/nadeem/DS/KATHPRFI_UHF/RDB_FILES --flags /home/nadeem/DS/KATHPRFI_UHF/FLAG_FILES --zarr /home/nadeem/DS/KATHPRFI_UHF/ZARR_FILES/Z20190901_20200330.zarr --good /home/nadeem/DS/KATHPRFI_UHF/GOOD_FILES/gd_files.npy --bad /home/nadeem/DS/KATHPRFI_UHF/BAD_FILES/bd_files.npy -n 1 --tokenPresent All_20190303_20200303_SCI_IMG_OBS_UHF.csv "
+#alias kathprfiUHF="docker run ${DOCKER_OPTS} --name $DOCKER_NAME $DOCKER_NAME python3.8 --version"
