@@ -24,11 +24,12 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     git \
     pkg-config \
     libsnappy-dev \
-#    python3-pip \
+    python3-pip \
     python3-setuptools \
     python3-dev \
     build-essential \
     vim \
+    libnlopt0 \
  && rm -rf /var/lib/apt/lists/*
 
 
@@ -71,6 +72,9 @@ COPY requirements.txt /tmp/
 RUN pip3 install -r /tmp/requirements.txt
 RUN jupyter notebook --generate-config
 
+RUN python3 -m pip install git+https://github.com/rajeshrinet/pyross.git@a03b8ba0dd422f5acaa9919ab62bed39f7b6b44a#egg=PyRoss
+RUN python3 -m pip install git+https://github.com/lukastk/PyRossGeo.git
+
 # run on 
 EXPOSE 8891
 
@@ -98,4 +102,4 @@ ENTRYPOINT ["/tini", "--"]
 #ENV PYTHONPATH "$PYTHONPATH:/usr/lib/python3/dist-packages/:~/.local/lib/python3.6/site-packages"
 
 # default run a notebook server
-CMD sh -c 'whoami && jupyter notebook --no-browser --ip="0.0.0.0" --port 8891 $HOME'
+CMD sh -c 'whoami && jupyter lab --no-browser --ip="0.0.0.0" --port 8891 $HOME'
