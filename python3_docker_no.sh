@@ -1,6 +1,6 @@
 #!/bin/bash -p
 
-DOCKER_NAME="nadeemjup3"
+DOCKER_NAME="nadjup3"
 
 DOCKER_OPTS="-it "\
 "--rm "\

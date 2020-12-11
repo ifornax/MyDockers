@@ -27,6 +27,7 @@ entrypoints==0.3
 ephem==3.7.7.1
 et-xmlfile==1.0.1
 fasteners==0.15
+fpdf
 geopandas
 gnureadline==8.0.0
 google==2.0.3
@@ -124,5 +125,5 @@ xarray==0.15.1
 xlrd==1.2.0
 xlwt==1.3.0
 zarr==2.4.0
-nlopt==2.4.2.post2
+nlopt
 fbprophet==0.6

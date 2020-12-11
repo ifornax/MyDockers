@@ -30,6 +30,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     build-essential \
     vim \
     libnlopt0 \
+    python-cairo \
  && rm -rf /var/lib/apt/lists/*
 
 
@@ -72,8 +73,18 @@ COPY requirements.txt /tmp/
 RUN pip3 install -r /tmp/requirements.txt
 RUN jupyter notebook --generate-config
 
-RUN python3 -m pip install git+https://github.com/rajeshrinet/pyross.git@a03b8ba0dd422f5acaa9919ab62bed39f7b6b44a#egg=PyRoss
-RUN python3 -m pip install git+https://github.com/lukastk/PyRossGeo.git
+RUN pip3 install pyross>=1.1.6
+RUN pip3 install PyRossGeo
+#RUN python3 -m pip install git+https://github.com/rajeshrinet/pyross.git
+#RUN python3 -m pip install git+https://github.com/lukastk/PyRossGeo.git
+
+RUN python3 -m pip install -e git+https://github.com/olivierverdier/odelab.git#egg=4837e6c84a0cfed4f020560bc5faff1887983455
+RUN python3 -m pip install -e git+https://github.com/hplgit/odespy.git#egg=c1200a6d1a36ba539766a8bbfb9104740cfb74c7
+
+#RUN git clone --single-branch -b python3 https://github.com/briandrawert/odespy.git
+#RUN python3 /odespy/setup.py install
+
+#RUN pip3 install -e git+https://github.com/hplgit/odespy.git#egg=odespy
 
 # run on 
 EXPOSE 8891
