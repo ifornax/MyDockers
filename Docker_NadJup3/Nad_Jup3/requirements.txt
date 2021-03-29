@@ -83,7 +83,7 @@ prometheus-client==0.7.1
 prompt-toolkit==3.0.5
 psutil==5.7.0
 ptyprocess==0.6.0
-Pygments==2.6.1
+Pygments==2.7.4
 PyMeeus==0.3.7
 pyparsing==2.4.7
 #-e git+https://github.com/rajeshrinet/pyross.git@a03b8ba0dd422f5acaa9919ab62bed39f7b6b44a#egg=PyRoss
