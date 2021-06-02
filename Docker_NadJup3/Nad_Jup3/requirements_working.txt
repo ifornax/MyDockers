@@ -146,7 +146,7 @@ tornado==5.1.1
 traitlets==4.3.2
 typing==3.6.4
 umap-learn==0.2.3
-urllib3==1.22
+urllib3==1.26.5
 vega==1.0.1
 vega-datasets==0.4.1
 vega3==0.13.0
