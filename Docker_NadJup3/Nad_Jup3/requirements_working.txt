@@ -42,7 +42,7 @@ html5lib==1.0.1
 idna==2.6
 ipaddress==1.0.22
 ipykernel>=4.8.*
-ipython==7.0.*
+ipython==7.16.*
 ipython-genutils>=0.2.*
 ipywidgets>=7.2.*
 itsdangerous==1.1.0
