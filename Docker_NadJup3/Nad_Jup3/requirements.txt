@@ -67,7 +67,7 @@ nodejs==0.1.1
 notebook==6.1.5
 npm==0.1.1
 numcodecs==0.6.4
-numpy==1.18.2
+numpy==1.22.0
 numba
 openpyxl==3.0.3
 optional-django==0.1.0
