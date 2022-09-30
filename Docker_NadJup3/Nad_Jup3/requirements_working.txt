@@ -49,7 +49,7 @@ itsdangerous==1.1.0
 jedi==0.12.0
 Jinja2==2.10
 jmespath==0.9.3
-joblib==0.13.1
+joblib==1.2.0
 jsonschema==3.0.1
 #katdal==0.10.2.dev852+master.6349c7e
 #katpoint==0.8.dev401+master.6a3c5d3
