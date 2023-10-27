@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 ARG BASE_CONTAINER=ubuntu:18.04
 FROM $BASE_CONTAINER
 
@@ -8,8 +10,15 @@ LABEL maintainer="SARAO Data Science <nadeem@ska.ac.za>"
 
 USER root
 
-RUN apt-get update && apt-get -yq dist-upgrade \
- && apt-get install -yq --no-install-recommends \
+# && DEBIAN_FRONTEND=noninteractive  apt-get install -y apt-utils \
+
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt update
+RUN apt install -y tzdata
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
     wget \
     bzip2 \
     ca-certificates \
@@ -24,16 +33,34 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     git \
     pkg-config \
     libsnappy-dev \
-    python3-setuptools \
-    python3-dev \
     build-essential \
     vim \
+    software-properties-common \
+    python \
+    python-dev \
+    python-tk \
+    python-setuptools \
  && rm -rf /var/lib/apt/lists/*
 
+#RUN apt-get update && DEBIAN_FRONTEND=noninteractive  \
+RUN  apt-get install -y software-properties-common
+#RUN apt-get install -y python2.7 \
+#    python2-setuptools \
+#    python2-dev 
+
+#RUN apt-get update -y
+#RUN apt-get install -y python-tk
 
 # intalling updated version of pip for user only
-RUN wget https://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py pip>=19.2 
+RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && \
+    python get-pip.py pip
+
+#RUN apt-get install python-pip
+
+RUN python --version
+
+
+#RUN pip install tkinter
 
 Run echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -65,10 +92,15 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 #   useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
 
 #install python requirements file
-#COPY requirements.txt /tmp/
-COPY Nadeemrequirements.txt /tmp/
-#RUN pip3 install -r /tmp/requirements.txt
-RUN pip3 install -r /tmp/Nadeemrequirements.txt
+
+#COPY Isaacrequirements.txt /tmp/
+#RUN pip2 install -r /tmp/requirement.txt
+
+COPY old_code_requirement.txt /tmp/.
+RUN pip2 install -r /tmp/old_code_requirement.txt
+
+#COPY Nadeemrequirements.txt /tmp/
+#RUN pip3 install -r /tmp/Nadeemrequirements.txt
 
 # run on port 8895
 EXPOSE 8895
@@ -96,12 +128,16 @@ RUN echo "Running papermill now...."
 # This will run the papermill when docker is launched
 #
 
-CMD ls /home/nadeem/DS/FB_Prophet/*py && \
-    pwd && \
-    cd
+#CMD ls /home/nadeem/DS/FB_Prophet/*py && \
+#    pwd && \
+#    cd
 
 #CMD python3 $HOME/DS/FB_Prophet/papermill_test.py
 
 # default run a notebook server
 #CMD sh -c 'whoami && jupyter notebook --no-browser --ip="0.0.0.0" --port 8893 $HOME'
-CMD sh -c 'whoami && python3 --version'
+
+#WORKDIR "$HOME/GitHub/kathprfi/"
+#RUN export PYTHONPATH="${PYTHONPATH}:$HOME/GitHub/kathprfi/"
+CMD echo $HOME
+

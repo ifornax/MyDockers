@@ -1,0 +1,10 @@
+dask
+h5py
+katdal
+matplotlib
+numba
+numpy
+pandas
+psutil
+six
+xarray
